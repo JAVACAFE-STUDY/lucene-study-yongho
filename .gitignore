@@ -17,5 +17,11 @@ hs_err_pid*
 build
 out
 
+# gradle
+.gradle
+gradle
+gradlew
+gradlew.bat
+
 # svn
 .svn
