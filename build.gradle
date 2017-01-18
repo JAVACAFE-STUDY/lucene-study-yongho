@@ -1,13 +1,39 @@
-apply plugin: 'java'
+group 'io.github.yonghochoi'
+version '1.0-SNAPSHOT'
+apply plugin: 'base'
+apply plugin: 'idea'
 
-repositories {
-    jcenter()
+buildscript {
+    repositories {
+        jcenter()
+    }
 }
 
-dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'org.apache.lucene:lucene-test-framework:4.10.3'
-    compile 'org.apache.lucene:lucene-core:4.10.3'
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
 
-    testCompile 'junit:junit:4.12'
+subprojects {
+    apply plugin: 'java'
+
+    // 자바 버전 설정
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    // 인코딩 설정
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+    }
+}
+
+project(':lucene-package') {
+    dependencies {
+        compile 'org.slf4j:slf4j-api:1.7.21'
+        compile 'org.apache.lucene:lucene-test-framework:4.10.3'
+        compile 'org.apache.lucene:lucene-core:4.10.3'
+    }
 }

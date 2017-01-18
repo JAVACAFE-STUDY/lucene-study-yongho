@@ -21,7 +21,7 @@ import java.util.List;
 public class TestCheckIndex extends LuceneTestCase {
 
     public void testDeletedDocs() throws IOException {
-        Directory dir = newDirectory();
+        Directory dir = newDirectory(); // RAMDirectory 생성
         IndexWriter writer = new IndexWriter(dir, newIndexWriterConfig(new MockAnalyzer(random()))
                 .setMaxBufferedDocs(2));
         for (int i = 0; i < 19; i++) {
@@ -33,10 +33,10 @@ public class TestCheckIndex extends LuceneTestCase {
             doc.add(newField("field", "aaa" + i, customType));
             writer.addDocument(doc);
         }
-        writer.forceMerge(1);
-        writer.commit();
-        writer.deleteDocuments(new Term("field", "aaa5"));
-        writer.close();
+        writer.forceMerge(1);   // 인자로 전달된 maxNumSegments 이하의 개수로 segment를 병합.
+        writer.commit();    // commit을 수행하면 segment 병합이 적용됨.
+        writer.deleteDocuments(new Term("field", "aaa5"));  // aaa5 Document 제거
+        writer.close(); // close 시 제거한 Document가 적용됨
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream(1024);
         CheckIndex checker = new CheckIndex(dir);
